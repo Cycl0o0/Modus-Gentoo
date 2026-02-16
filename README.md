@@ -17,7 +17,7 @@
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/S4NKALP/Modus?style=for-the-badge&logo=github&color=FFB686&logoColor=D9E0EE&labelColor=292324)](https://github.com/S4NKALP/Modus/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/cycl0o0/Modus-Gentoo?style=for-the-badge&logo=github&color=FFB686&logoColor=D9E0EE&labelColor=292324)](https://github.com/cycl0o0/Modus-Gentoo/stargazers)
 [![Hyprland](https://img.shields.io/badge/Made%20for-Hyprland-pink?style=for-the-badge&logo=linux&logoColor=D9E0EE&labelColor=292324&color=C6A0F6)](https://hyprland.org/)
 [![Maintained](https://img.shields.io/badge/Maintained-Yes-blue?style=for-the-badge&logo=linux&logoColor=D9E0EE&labelColor=292324&color=3362E1)]()
 [![Discord](https://dcbadge.limes.pink/api/server/https://discord.gg/tRFxkbQ3Zq)](https://discord.gg/tRFxkbQ3Zq)
@@ -36,37 +36,72 @@
 <br>
 
 
-## Installation 
+## Installation (Gentoo)
 
 > [!CAUTION]
-> - You need a working installation of hyprland and knowledge of how it works
-> - There may not be all packages in your system install them accordingly
+> - You need a working installation of Hyprland and knowledge of how it works
+> - Requires `guru` and `hyproverlay` overlays enabled
 
+### Prerequisites
+
+Enable required overlays:
 ```bash
-git clone https://github.com/S4NKALP/Modus ~/.config/Modus
-cd ~/.config/Modus
-./install.sh
+sudo eselect repository enable guru
+sudo eselect repository enable hyproverlay
+sudo emerge --sync guru hyproverlay
 ```
 
-> [!TIP]
-> ## Post Installation
-> - Install recommended [Icon theme](https://github.com/vinceliuice/MacTahoe-icon-theme) , [GTK theme](https://github.com/vinceliuice/MacTahoe-gtk-theme) and [Cursor Theme](https://github.com/vinceliuice/MacTahoe-icon-theme/tree/main/cursors) <br>
-> - Check `config/hypr/modus.conf` edit it according to your device and copy it to your hyprland config
-> - For Lock Screen Bind keys to `python lock.py`
-
-<h2><sub><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" /></sub> Todo</h2>
-
-## Manual Installation (WIP)
+### Quick Install
 
 ```bash
-paru -S glace-git gtk-session-lock python-pyotp python-pillow python-ijson python-setproctitle apple-fonts cinnamon-desktop --needed
-git clone https://github.com/S4NKALP/Modus ~/.config/Modus
+git clone https://github.com/cycl0o0/Modus-Gentoo ~/.config/Modus
+cd ~/.config/Modus
+./install-gentoo.sh
+```
+
+Use `-b` flag to enable binary packages if available:
+```bash
+./install-gentoo.sh -b
+```
+
+### Manual Installation
+
+```bash
+# Install dependencies from portage
+sudo emerge -n media-video/ffmpeg media-gfx/imagemagick x11-libs/libnotify \
+    media-sound/playerctl dev-python/pillow dev-python/pygobject \
+    dev-python/requests dev-python/numpy dev-python/psutil \
+    x11-misc/slurp gui-apps/wl-clipboard media-video/wf-recorder \
+    sys-power/acpi app-misc/brightnessctl gui-apps/swappy
+
+# Packages from overlays (need ~amd64 keyword)
+echo "gui-apps/hyprsunset ~amd64" | sudo tee -a /etc/portage/package.accept_keywords/modus
+echo "x11-misc/matugen ~amd64" | sudo tee -a /etc/portage/package.accept_keywords/modus
+echo "gui-libs/gtk-session-lock ~amd64" | sudo tee -a /etc/portage/package.accept_keywords/modus
+echo "app-misc/cliphist ~amd64" | sudo tee -a /etc/portage/package.accept_keywords/modus
+echo "gui-apps/uwsm ~amd64" | sudo tee -a /etc/portage/package.accept_keywords/modus
+
+sudo emerge -n gui-apps/hyprsunset x11-misc/matugen gui-libs/gtk-session-lock app-misc/cliphist gui-apps/uwsm
+
+# Install swww via cargo
+cargo install --git https://github.com/LGFae/swww.git
+
+# Clone and setup
+git clone https://github.com/cycl0o0/Modus-Gentoo ~/.config/Modus
 cd ~/.config/Modus
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 pip install --no-deps git+https://github.com/Fabric-Development/fabric.git
 ```
+
+> [!TIP]
+> ## Post Installation
+> - Install recommended [Icon theme](https://github.com/vinceliuice/MacTahoe-icon-theme), [GTK theme](https://github.com/vinceliuice/MacTahoe-gtk-theme) and [Cursor Theme](https://github.com/vinceliuice/MacTahoe-icon-theme/tree/main/cursors)
+> - Check `config/hypr/modus.conf` edit it according to your device and copy it to your hyprland config
+> - For Lock Screen bind keys to `python lock.py`
+
+## Todo
 
 - [x] Launcher
 - [x] Lock Screen
